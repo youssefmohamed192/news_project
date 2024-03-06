@@ -8,13 +8,25 @@ abstract class AppTheme {
       TextStyle(fontWeight: FontWeight.w400, fontSize: 14);
 
   static ThemeData lightTheme = ThemeData(
-    appBarTheme: const AppBarTheme(
+      appBarTheme: const AppBarTheme(
         color: AppColors.primary,
         titleTextStyle: appBarTextStyle,
+        toolbarHeight: 68,
         centerTitle: true,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(50),
-                bottomRight: Radius.circular(50)))),
-  );
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(50))),
+      ),
+      textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+              color: AppColors.description),
+          bodyMedium: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.normal,
+              color: AppColors.time),
+          bodySmall: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.normal,
+              color: AppColors.title)));
 }

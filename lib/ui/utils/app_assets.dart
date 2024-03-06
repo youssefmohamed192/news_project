@@ -7,4 +7,5 @@ abstract class AppAssets{
   static const String healthImage = "${imagePath}health.png";
   static const String politicsImage = "${imagePath}politics.png";
   static const String scienceImage = "${imagePath}science.png";
+  static const String backgroundImage = "${imagePath}pattern.png";
 }
