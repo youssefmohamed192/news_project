@@ -17,6 +17,10 @@ abstract class AppTheme {
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(50))),
       ),
       textTheme: const TextTheme(
+          headlineLarge: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              color: AppColors.white),
           bodyLarge: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.normal,
