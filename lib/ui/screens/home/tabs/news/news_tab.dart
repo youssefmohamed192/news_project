@@ -1,12 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_project/data/api/api_manager.dart';
 import 'package:news_project/data/model/SourcesResponse.dart';
 import 'package:news_project/ui/screens/home/tabs/news/news_list/news_list.dart';
+import 'package:news_project/ui/screens/home/tabs/news/news_tab_view_model.dart';
 import 'package:news_project/ui/utils/app_colors.dart';
 import 'package:news_project/ui/utils/app_theme.dart';
+import 'package:news_project/ui/widgets/loading_widget.dart';
+import 'package:provider/provider.dart';
 
 class NewsTab extends StatefulWidget {
   final String categoryID;
+
   const NewsTab({super.key, required this.categoryID});
 
   @override
@@ -15,20 +20,33 @@ class NewsTab extends StatefulWidget {
 
 class _NewsTabState extends State<NewsTab> {
   int currentTabIndex = 0;
+  NewsTabViewModel viewModel = NewsTabViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      viewModel.getSource(widget.categoryID);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: ApiManager.getSources(widget.categoryID),
-        builder: (context, snapShot) {
-          if (snapShot.hasData) {
-            return buildTabs(snapShot.data!);
-          } else if (snapShot.hasError) {
-            return Text(snapShot.error.toString());
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        });
+    return ChangeNotifierProvider(
+        create: (_) => viewModel,
+        child: Consumer<NewsTabViewModel>(
+            builder: (context, viewModel, _){
+              Widget currentView;
+              if (viewModel.isLoading) {
+                currentView = const LoadingWidget();
+              } else if (viewModel.sources.isNotEmpty) {
+                currentView = buildTabs(viewModel.sources);
+              } else {
+                currentView = ErrorWidget(viewModel.errorMessage ??
+                    "Something went wrong please try again later!");
+              }
+              return currentView;
+            },));
   }
 
   Widget buildTabs(List<Source> list) {
@@ -67,10 +85,7 @@ class _NewsTabState extends State<NewsTab> {
         decoration: BoxDecoration(
             color: isSelected ? AppColors.primary : AppColors.transparent,
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: AppColors.primary,
-              width: 3
-            )),
+            border: Border.all(color: AppColors.primary, width: 3)),
         child: Text(
           name,
           style: AppTheme.tabBarTextStyle.copyWith(
