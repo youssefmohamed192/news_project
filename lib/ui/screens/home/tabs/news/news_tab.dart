@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news_project/data/api/api_manager.dart';
+import 'package:news_project/data/repos/news_repo/data_sources/online_data_source.dart';
 import 'package:news_project/data/model/SourcesResponse.dart';
 import 'package:news_project/ui/screens/home/tabs/news/news_list/news_list.dart';
 import 'package:news_project/ui/screens/home/tabs/news/news_tab_view_model.dart';

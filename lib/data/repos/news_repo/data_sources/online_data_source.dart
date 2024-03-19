@@ -3,13 +3,13 @@ import 'package:http/http.dart';
 import 'package:news_project/data/model/ArticlesResponse.dart';
 import 'package:news_project/data/model/SourcesResponse.dart';
 
-abstract class ApiManager {
+class OnlineDataSource {
   static const String baseUrl = "newsapi.org";
   static const sourcesEndPoint = "/v2/top-headlines/sources";
   static const articlesEndPoint = "/v2/everything";
   static const String apiKey = "3d03b8562f86476ab7756e091312ef2c";
 
-  static Future<List<Source>> getSources(String category) async {
+  Future<SourcesResponse> getSources(String category) async {
     Uri url = Uri.parse(
         "https://$baseUrl$sourcesEndPoint?apiKey=$apiKey&category=$category");
     Response response = await get(url);
@@ -18,12 +18,12 @@ abstract class ApiManager {
     if (response.statusCode >= 200 &&
         response.statusCode < 300 &&
         sourcesResponse.sources?.isNotEmpty == true) {
-      return sourcesResponse.sources!;
+      return sourcesResponse;
     }
     throw Exception(sourcesResponse.message);
   }
 
-  static Future<List<Article>> getArticles(String sourceID) async {
+  Future<List<Article>> getArticles(String sourceID) async {
     Uri url = Uri.https(
         baseUrl, articlesEndPoint, {"apiKey": apiKey, "sources": sourceID});
     Response serverResponse = await get(url);
